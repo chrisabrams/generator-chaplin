@@ -1,0 +1,41 @@
+{
+  "name": "generator-chaplin",
+  "version": "0.0.0",
+  "description": "A generator for Yeoman",
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "homepage": "https://github.com/chrisabrams/generator-chaplin",
+  "bugs": "https://github.com/chrisabrams/generator-chaplin/issues",
+  "author": {
+    "name": "Chris Abrams",
+    "email": "mail@chrisabrams.com",
+    "url": "https://github.com/chrisabrams"
+  },
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chrisabrams/generator-chaplin.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "yeoman-generator": "~0.13.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.12.0"
+  },
+  "peerDependencies": {
+    "yo": ">=1.0.0-rc.1"
+  },
+  "engines": {
+    "node": ">=0.8.0",
+    "npm": ">=1.2.10"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
+}
