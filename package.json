@@ -1,7 +1,7 @@
 {
   "name": "generator-chaplin",
   "version": "0.0.0",
-  "description": "A generator for Yeoman",
+  "description": "Chaplin generator for Yeoman",
   "keywords": [
     "yeoman-generator"
   ],
@@ -21,7 +21,8 @@
     "test": "mocha"
   },
   "dependencies": {
-    "yeoman-generator": "~0.13.0"
+    "yeoman-generator": "~0.13.0",
+    "lodash": "~2.2.1"
   },
   "devDependencies": {
     "mocha": "~1.12.0"
