@@ -166,7 +166,7 @@ ChaplinGenerator.prototype.generateRequests = function(){
               var arr = args.split(' ');
               fileCount += arr.length;
               for( var cur = 0; cur < arr.length; cur ++){
-                this.invoke('chaplins:'+name, { args: [ arr[cur]+ appendName ] }, onFinished );
+                this.invoke('chaplin:'+name, { args: [ arr[cur]+ appendName ] }, onFinished );
               }
             }
           }.bind( this );
