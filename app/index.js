@@ -3,7 +3,11 @@
 var fs     = require('fs'),
     path   = require('path'),
     util   = require('util'),
-    yeoman = require('yeoman-generator');
+    yeoman = require('yeoman-generator'),
+    modelGenerator = require('../model/index'),
+    controllerGenerator = require('../controller/index'),
+    viewGenerator = require('../view/index');
+
 
 var walk = function(dir, done) {
   var results = [];
@@ -46,15 +50,33 @@ ChaplinGenerator.prototype.askFor = function askFor() {
   // have Yeoman greet the user.
   console.log(this.yeoman);
 
-  var prompts = [{
-    name: 'appName',
-    message: 'What is the name of your app?'
-  }];
+  var prompts = [
+    {
+      name: 'appName',
+      message: 'What is the name of your app?'
+    },
+    {
+      name: 'generateModels',
+      message: 'Would you like to generate some models? (Y/N)'
+    },
+    {
+      name: 'generateViews',
+      message: 'Would you like to generate some views? (Y/N)'
+    },
+    {
+      name: 'generateControllers',
+      message: 'Would you like to generate some controllers? (Y/N)'
+    }
+  ];
 
   this.prompt(prompts, function (props) {
     this.appName = props.appName;
-
+    this.generateModels      = ( props.generateModels && props.generateModels.toLowerCase() === 'y' );
+    this.generateViews       = ( props.generateViews && props.generateViews.toLowerCase() === 'y' );
+    this.generateControllers = ( props.generateControllers && props.generateControllers.toLowerCase() === 'y' );
+    
     cb();
+    
   }.bind(this));
 };
 
@@ -90,11 +112,74 @@ ChaplinGenerator.prototype.app = function app() {
         
         _this.copy(file, file);
       }
-      
     });
 
     cb();
-  });
+  }.bind(this));
+
+}
+
+
+ChaplinGenerator.prototype.generateRequests = function(){
+   var cb = this.async(),
+      prompts = [];
+      
+    if( this.generateModels ){
+      prompts.push({
+        name: 'modelNames',
+        message: 'Write a list of Chaplin Models you would like generated (Ex: user posts comments )'
+      });
+    }
+
+    if( this.generateControllers ){
+      prompts.push({
+        name: 'controllerNames',
+        message: 'Write a list of Chaplin Controllers you would like generated (Ex: user posts comments )'
+      });
+    }
+
+    if( this.generateViews ){
+      prompts.push({
+        name: 'viewNames',
+        message: 'Write a list of Chaplin Views you would like generated (Ex: home cart item )'
+      });
+    }
+
+    // Run callback if there were no prompts added
+    if( !prompts.length ){
+      cb();
+      return;
+    }
+
+    this.prompt( prompts, function( props ){
+      var fileCount = 1, 
+          onFinished = function(){
+            fileCount--;
+            if( !fileCount ){
+              cb();
+            }
+          },
+          createFiles = function( name, args, appendStr ){
+            var appendName = appendStr || '';
+
+            if( args && args.length ){
+              var arr = args.split(' ');
+              fileCount += arr.length;
+              for( var cur = 0; cur < arr.length; cur ++){
+                this.invoke('chaplins:'+name, { args: [ arr[cur]+ appendName ] }, onFinished );
+              }
+            }
+          }.bind( this );
+
+      createFiles( 'view', props.viewNames );
+      createFiles( 'model', props.modelNames );
+      createFiles( 'controller', props.controllerNames ); //Append -controller to all controllers
+
+      // Run this first once in case no filenames were passed
+      onFinished();
+      
+    }.bind(this));
+  
 };
 
 ChaplinGenerator.prototype.projectfiles = function projectfiles() {
