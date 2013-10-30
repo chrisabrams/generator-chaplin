@@ -65,7 +65,7 @@ module.exports = (grunt) ->
       livereload:
         options:
           middleware: (connect) ->
-            [lrSnippet, mountFolder(connect, ".")]
+            [lrSnippet, mountFolder(connect, "./public")]
 
     copy:
       assets:
@@ -108,7 +108,7 @@ module.exports = (grunt) ->
 
     open:
       server:
-        path: "http://localhost:<%%= connect.options.port %>"
+        path: "http://localhost:<%= connect.options.port %>"
 
     uglify:
       app:
