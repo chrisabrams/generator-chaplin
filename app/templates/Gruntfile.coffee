@@ -65,7 +65,7 @@ module.exports = (grunt) ->
       livereload:
         options:
           middleware: (connect) ->
-            [lrSnippet, mountFolder(connect, ".")]
+            [lrSnippet, mountFolder(connect, "./public")]
 
     copy:
       assets:
