@@ -108,7 +108,7 @@ module.exports = (grunt) ->
 
     open:
       server:
-        path: "http://localhost:<%%= connect.options.port %>"
+        path: "http://localhost:<%= connect.options.port %>"
 
     uglify:
       app:
