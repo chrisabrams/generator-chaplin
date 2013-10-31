@@ -58,7 +58,8 @@ ChaplinGenerator.prototype.askFor = function askFor() {
     {
       name: 'controllerSuffix',
       message: 'Controller suffix (leave this blank if you dont want one)'
-    },
+    }
+    /*
     {
       name: 'generateControllers',
       message: 'Generate controllers now? (Y/n)'
@@ -71,6 +72,7 @@ ChaplinGenerator.prototype.askFor = function askFor() {
       name: 'generateViews',
       message: 'Generate views now? (Y/n)'
     }
+    */
   ];
 
   this.prompt(prompts, function (props) {
@@ -136,6 +138,7 @@ ChaplinGenerator.prototype.app = function app() {
 
 }
 
+/*
 ChaplinGenerator.prototype.generateRequests = function(){
    var cb = this.async(),
       prompts = [];
@@ -197,6 +200,7 @@ ChaplinGenerator.prototype.generateRequests = function(){
     }.bind(this));
 
 };
+*/
 
 ChaplinGenerator.prototype.projectfiles = function projectfiles() {
   this.copy('editorconfig', '.editorconfig');
