@@ -1,6 +1,6 @@
 {
   "name": "generator-chaplin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Chaplin generator for Yeoman",
   "keywords": [
     "yeoman-generator"
