@@ -4,10 +4,10 @@ var fs     = require('fs'),
     path   = require('path'),
     util   = require('util'),
     yeoman = require('yeoman-generator'),
-    modelGenerator = require('../model/index'),
-    controllerGenerator = require('../controller/index'),
-    viewGenerator = require('../view/index');
 
+    controllerGenerator = require('../controller/index'),
+    modelGenerator      = require('../model/index'),
+    viewGenerator       = require('../view/index');
 
 var walk = function(dir, done) {
   var results = [];
@@ -53,30 +53,43 @@ ChaplinGenerator.prototype.askFor = function askFor() {
   var prompts = [
     {
       name: 'appName',
-      message: 'What is the name of your app?'
+      message: 'Application name'
     },
     {
-      name: 'generateModels',
-      message: 'Would you like to generate some models? (Y/N)'
-    },
-    {
-      name: 'generateViews',
-      message: 'Would you like to generate some views? (Y/N)'
+      name: 'controllerSuffix',
+      message: 'Controller suffix (leave this blank if you dont want one)'
     },
     {
       name: 'generateControllers',
-      message: 'Would you like to generate some controllers? (Y/N)'
+      message: 'Generate controllers now? (Y/n)'
+    },
+    {
+      name: 'generateModels',
+      message: 'Generate models now? (Y/n)'
+    },
+    {
+      name: 'generateViews',
+      message: 'Generate views now? (Y/n)'
     }
   ];
 
   this.prompt(prompts, function (props) {
     this.appName = props.appName;
+
+    if(typeof props.controllerSuffix == 'string' && props.controllerSuffix.length > 0) {
+      this.controllerSuffix = props.controllerSuffix;
+    }
+
+    else {
+      this.controllerSuffix = '';
+    }
+
+    this.generateControllers = ( props.generateControllers && props.generateControllers.toLowerCase() === 'y' );
     this.generateModels      = ( props.generateModels && props.generateModels.toLowerCase() === 'y' );
     this.generateViews       = ( props.generateViews && props.generateViews.toLowerCase() === 'y' );
-    this.generateControllers = ( props.generateControllers && props.generateControllers.toLowerCase() === 'y' );
-    
+
     cb();
-    
+
   }.bind(this));
 };
 
@@ -99,17 +112,21 @@ ChaplinGenerator.prototype.app = function app() {
   this.template('_config.json', 'config.json');
   this.template('_package.json', 'package.json');
   this.copy('Gruntfile.coffee', 'Gruntfile.coffee');
+  this.template('app/_initialize.coffee', 'app/initialize.coffee');
+  this.copy('app/controllers/_home.coffee', 'app/controllers/home' + this.controllerSuffix + '.coffee')
 
   var _this = this;
+
   walk(__dirname + '/templates/app', function(err, files) {
     if (err) throw err;
 
     files.forEach(function(file) {
-      
-      // Ignore .DS_Store file
-      if(file.indexOf('.DS_Store') < 1) {
+
+      // Ignore .DS_Store files as well as files that start with _.
+      if((file.indexOf('.DS_Store') < 1) && (file.indexOf('_') < 1)) {
+
         file = file.replace(__dirname + '/templates/', '');
-        
+
         _this.copy(file, file);
       }
     });
@@ -119,29 +136,28 @@ ChaplinGenerator.prototype.app = function app() {
 
 }
 
-
 ChaplinGenerator.prototype.generateRequests = function(){
    var cb = this.async(),
       prompts = [];
-      
-    if( this.generateModels ){
-      prompts.push({
-        name: 'modelNames',
-        message: 'Write a list of Chaplin Models you would like generated (Ex: user posts comments )'
-      });
-    }
 
     if( this.generateControllers ){
       prompts.push({
         name: 'controllerNames',
-        message: 'Write a list of Chaplin Controllers you would like generated (Ex: user posts comments )'
+        message: 'Name your controllers ( Ex: users posts items/comments )'
+      });
+    }
+
+    if( this.generateModels ){
+      prompts.push({
+        name: 'modelNames',
+        message: 'Name your models ( Ex: user post items/comment )'
       });
     }
 
     if( this.generateViews ){
       prompts.push({
         name: 'viewNames',
-        message: 'Write a list of Chaplin Views you would like generated (Ex: home cart item )'
+        message: 'Name your views ( Ex: home cart items/comments )'
       });
     }
 
@@ -152,24 +168,24 @@ ChaplinGenerator.prototype.generateRequests = function(){
     }
 
     this.prompt( prompts, function( props ){
-      var fileCount = 1, 
-          onFinished = function(){
-            fileCount--;
-            if( !fileCount ){
-              cb();
-            }
-          },
-          createFiles = function( name, args, appendStr ){
-            var appendName = appendStr || '';
+      var fileCount = 1,
+        onFinished = function(){
+          fileCount--;
+          if( !fileCount ){
+            cb();
+          }
+        },
+        createFiles = function( name, args, appendStr ) {
+          var appendName = appendStr || '';
 
-            if( args && args.length ){
-              var arr = args.split(' ');
-              fileCount += arr.length;
-              for( var cur = 0; cur < arr.length; cur ++){
-                this.invoke('chaplin:'+name, { args: [ arr[cur]+ appendName ] }, onFinished );
-              }
+          if( args && args.length ){
+            var arr = args.split(' ');
+            fileCount += arr.length;
+            for( var cur = 0; cur < arr.length; cur ++){
+              this.invoke('chaplin:'+name, { args: [ arr[cur]+ appendName ] }, onFinished );
             }
-          }.bind( this );
+          }
+        }.bind( this );
 
       createFiles( 'view', props.viewNames );
       createFiles( 'model', props.modelNames );
@@ -177,9 +193,9 @@ ChaplinGenerator.prototype.generateRequests = function(){
 
       // Run this first once in case no filenames were passed
       onFinished();
-      
+
     }.bind(this));
-  
+
 };
 
 ChaplinGenerator.prototype.projectfiles = function projectfiles() {

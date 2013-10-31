@@ -4,7 +4,7 @@ routes      = require './routes'
 $ ->
 
   new Application {
-    title: 'Chaplin Generator Example',
-    controllerSuffix: '',
+    title: '<%= appName %>',
+    controllerSuffix: '<%= controllerSuffix %>',
     routes
   }

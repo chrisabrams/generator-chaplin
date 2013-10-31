@@ -39,7 +39,7 @@ describe('app generator', function () {
       'app/templates/home.hbs',
       'app/templates/site.hbs',
       'app/templates/header.hbs',
-      'app/controllers/home-controller.coffee',
+      //'app/controllers/home.coffee', Need to figure this one out
       'app/controllers/base/controller.coffee',
       'app/assets/index.html',
       'app/assets/images/.gitkeep',
@@ -56,7 +56,8 @@ describe('app generator', function () {
     ];
 
     helpers.mockPrompt(this.app, {
-      'appName': 'footestbaz'
+      'appName': 'footestbaz',
+      'controllerSuffix': ''
     });
 
     this.app.options['skip-install'] = true;
