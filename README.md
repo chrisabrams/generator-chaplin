@@ -7,7 +7,7 @@ Generate scaffolds for [Chaplin.js](http://chaplinjs.org/) using [Yeoman](http:/
 Features:
 
 - Provides a working Chaplin.js boilerplate application powered by Yeoman, Grunt, and Bower
-- Generate (models, views, controllers, etc.) on the fly
+- Generate models, views, controllers, etc. on the fly
 - Coffeescript source maps out of the box
 - Livereload while developing
 
