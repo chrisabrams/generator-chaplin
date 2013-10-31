@@ -30,13 +30,20 @@ module.exports = (grunt) ->
           ]
         options:
           debug: true
-          transform: ['coffeeify','hbsfy']
-          extensions: ['.coffee','.hbs']
+          transform: ['coffeeify', 'hbsfy']
+          extensions: ['.coffee', '.hbs']
           insertGlobals: true
           aliasMappings: [
-            cwd: 'app/controllers'
-            src: ['**/*.coffee']
-            dest: 'controllers'
+            {
+              cwd: 'app/controllers'
+              src: ['**/*.coffee']
+              dest: 'controllers'
+            },
+            {
+              cwd: 'app/templates'
+              src: ['**/*.hbs']
+              dest: '../templates'
+            }
           ]
           shim:
             jquery:
@@ -140,12 +147,12 @@ module.exports = (grunt) ->
           nospawn: true
       hbs:
         files: ['app/templates/**/*.hbs']
-        tasks: ['scripts', 'concat:devJs']
+        tasks: ['browserify:app']
         options:
           debounceDelay: 250
       js:
         files: ['app/**/*.coffee'],
-        tasks: ['scripts', 'concat:devJs']
+        tasks: ['browserify:app']
         options:
           debounceDelay: 250
       livereload:
