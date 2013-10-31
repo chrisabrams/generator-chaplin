@@ -17,7 +17,7 @@ Features:
 
         npm install -g yo
 
-2. install the Chaplin generator globally
+2. Install the Chaplin generator globally
 
         npm install -g generator-chaplin
 
