@@ -125,7 +125,7 @@ ChaplinGenerator.prototype.app = function app() {
     files.forEach(function(file) {
 
       // Ignore .DS_Store files as well as files that start with _.
-      if((file.indexOf('.DS_Store') < 1) && (file.indexOf('_') < 1)) {
+      if ( file.indexOf('.DS_Store') === -1 && file.indexOf('_') === -1 ) {
 
         file = file.replace(__dirname + '/templates/', '');
 
