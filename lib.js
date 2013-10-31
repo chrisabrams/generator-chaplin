@@ -12,14 +12,23 @@ module.exports = helpers = {
 
     nameAndPath: function(type) {
 
-      var name = helpers.slugify(this.name);
+      var name     = helpers.slugify(this.name),
+          pathType = type;
+
+      if(type == 'collection') {
+        pathType = 'model';
+      }
+
+      if(type == 'collectionview') {
+        pathType = 'view';
+      }
 
       if(this.path) {
-        this.template('_' + type + '.coffee', 'app/' + type + 's/' + this.path + '/' + name + '.coffee');
+        this.template('_' + type + '.coffee', 'app/' + pathType + 's/' + this.path + '/' + name + '.coffee');
       }
 
       else {
-        this.template('_' + type + '.coffee', 'app/' + type + 's/' + name + '.coffee');
+        this.template('_' + type + '.coffee', 'app/' + pathType + 's/' + name + '.coffee');
       }
 
     }
@@ -51,7 +60,7 @@ module.exports = helpers = {
 
     str = str.replace(/^\s+|\s+$/g, ''); // trim
     str = str.toLowerCase();
-    
+
     var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
     var to   = "aaaaeeeeiiiioooouuuunc------";
     for (var i=0, l=from.length ; i<l ; i++) {
