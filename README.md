@@ -4,6 +4,13 @@
 
 Generate scaffolds for [Chaplin.js](http://chaplinjs.org/) using [Yeoman](http://yeoman.io). Expedite the process of creating single page web apps.
 
+Features:
+
+- Provides a working Chaplin.js boilerplate application powered by Yeoman, Grunt, and Bower
+- Generate (models, views, controllers, etc.) on the fly
+- Coffeescript source maps out of the box
+- Livereload while developing
+
 ## Installation
 
 1. Install Yeoman globally
