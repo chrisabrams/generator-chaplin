@@ -1,4 +1,4 @@
-Handlebars = require 'handlebars'
+Handlebars = require 'hbsfy/runtime'
 
 # Application-specific view helpers
 # http://handlebarsjs.com/#helpers
