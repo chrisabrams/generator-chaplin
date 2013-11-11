@@ -58,6 +58,18 @@ ChaplinGenerator.prototype.askFor = function askFor() {
     {
       name: 'controllerSuffix',
       message: 'Controller suffix (leave this blank if you dont want one)'
+    },
+    {
+      name: 'skeleton',
+      message: '
+      Please enter the number next to the skeleton you would like\n\n
+      [0] Barebones (minimum to get started)
+      '
+      /*
+      [1] HTML 5 Boilerplate
+      [2] Twitter Bootstrap
+      '
+      */
     }
     /*
     {
@@ -89,6 +101,14 @@ ChaplinGenerator.prototype.askFor = function askFor() {
     this.generateControllers = ( props.generateControllers && props.generateControllers.toLowerCase() === 'y' );
     this.generateModels      = ( props.generateModels && props.generateModels.toLowerCase() === 'y' );
     this.generateViews       = ( props.generateViews && props.generateViews.toLowerCase() === 'y' );
+
+    if(typeof props.skeleton == null) {
+      this.skeleton = 0;
+    }
+
+    else {
+      this.skeleton = parseInt(props.skeleton);
+    }
 
     cb();
 
