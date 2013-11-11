@@ -103,7 +103,7 @@ module.exports = (grunt) ->
           compress: false
           paths: ['app/css']
         files:
-          'tmp/css/app.css': 'app/css/application.styl'
+          'public/css/app.css': 'app/styles/application.styl'
 
     mocha:
       test:
@@ -162,7 +162,7 @@ module.exports = (grunt) ->
           'public/**/*'
         ]
 
-  grunt.registerTask 'b', ['clean', 'copy', 'browserify']
+  grunt.registerTask 'b', ['clean', 'copy', 'browserify', 'stylus' ]
   grunt.registerTask 'm', ['b', 'uglify']
   grunt.registerTask 's', ['b', 'connect:livereload', 'open', 'watch']
   grunt.registerTask 'default', 'b'
