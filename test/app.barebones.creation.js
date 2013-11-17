@@ -1,4 +1,3 @@
-/*global describe, beforeEach, it*/
 'use strict';
 
 var path    = require('path');
@@ -57,7 +56,8 @@ describe('app generator', function () {
 
     helpers.mockPrompt(this.app, {
       'appName': 'footestbaz',
-      'controllerSuffix': ''
+      'controllerSuffix': '',
+      'skeleton': '0'
     });
 
     this.app.options['skip-install'] = true;
