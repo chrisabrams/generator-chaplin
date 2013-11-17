@@ -1,8 +1,8 @@
 "use strict"
 
-moment          = require("moment")
 LIVERELOAD_PORT = 35729
 lrSnippet       = require("connect-livereload")(port: LIVERELOAD_PORT)
+moment          = require 'moment'
 
 mountFolder = (connect, dir) ->
   connect.static require("path").resolve(dir)
@@ -67,7 +67,7 @@ module.exports = (grunt) ->
 
     connect:
       options:
-        hostname: "localhost" # change this to '0.0.0.0' to access the server from outside
+        hostname: '0.0.0.0'
         port: 9000
       livereload:
         options:
@@ -85,12 +85,6 @@ module.exports = (grunt) ->
             filter: 'isFile'
           }
         ]
-
-    express:
-      dev:
-        options:
-          port: 4040
-          script: 'server.js'
 
     mincss:
       dist:
@@ -117,6 +111,14 @@ module.exports = (grunt) ->
       server:
         path: "http://localhost:<%= connect.options.port %>"
 
+    shell:
+      express:
+        options:
+          failOnError: true
+          stderr: true
+          stdout: true
+        command: 'coffee server.coffee -n'
+
     uglify:
       app:
         options:
@@ -129,7 +131,6 @@ module.exports = (grunt) ->
       options:
         nospawn: true
         livereload: LIVERELOAD_PORT
-
       assets:
         files: ['app/assets/**/*'],
         tasks: ['copy']
@@ -164,5 +165,5 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'b', ['clean', 'copy', 'browserify']
   grunt.registerTask 'm', ['b', 'uglify']
-  grunt.registerTask 's', ['b', 'connect:livereload', 'open', 'watch']
+  grunt.registerTask 's', ['b', 'shell:express', 'connect:livereload', 'open', 'watch']
   grunt.registerTask 'default', 'b'

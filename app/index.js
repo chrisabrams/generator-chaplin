@@ -3,34 +3,12 @@
 var fs     = require('fs'),
     path   = require('path'),
     util   = require('util'),
+    walk   = require(__dirname + '/lib/walk'),
     yeoman = require('yeoman-generator'),
 
     controllerGenerator = require('../controller/index'),
     modelGenerator      = require('../model/index'),
     viewGenerator       = require('../view/index');
-
-var walk = function(dir, done) {
-  var results = [];
-  fs.readdir(dir, function(err, list) {
-    if (err) return done(err);
-    var pending = list.length;
-    if (!pending) return done(null, results);
-    list.forEach(function(file) {
-      file = dir + '/' + file;
-      fs.stat(file, function(err, stat) {
-        if (stat && stat.isDirectory()) {
-          walk(file, function(err, res) {
-            results = results.concat(res);
-            if (!--pending) done(null, results);
-          });
-        } else {
-          results.push(file);
-          if (!--pending) done(null, results);
-        }
-      });
-    });
-  });
-};
 
 var ChaplinGenerator = module.exports = function ChaplinGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
@@ -61,30 +39,13 @@ ChaplinGenerator.prototype.askFor = function askFor() {
     },
     {
       name: 'skeleton',
-      message: '
-      Please enter the number next to the skeleton you would like\n\n
-      [0] Barebones (minimum to get started)
-      '
-      /*
-      [1] HTML 5 Boilerplate
-      [2] Twitter Bootstrap
-      '
-      */
+      message: " \
+      [0] Barebones (minimum to get started)\n \
+      [1] HTML 5 Boilerplate\n \
+      [2] Twitter Bootstrap\n \
+      Please enter the number next to the skeleton you would like\n\n \
+      "
     }
-    /*
-    {
-      name: 'generateControllers',
-      message: 'Generate controllers now? (Y/n)'
-    },
-    {
-      name: 'generateModels',
-      message: 'Generate models now? (Y/n)'
-    },
-    {
-      name: 'generateViews',
-      message: 'Generate views now? (Y/n)'
-    }
-    */
   ];
 
   this.prompt(prompts, function (props) {
@@ -97,10 +58,6 @@ ChaplinGenerator.prototype.askFor = function askFor() {
     else {
       this.controllerSuffix = '';
     }
-
-    this.generateControllers = ( props.generateControllers && props.generateControllers.toLowerCase() === 'y' );
-    this.generateModels      = ( props.generateModels && props.generateModels.toLowerCase() === 'y' );
-    this.generateViews       = ( props.generateViews && props.generateViews.toLowerCase() === 'y' );
 
     if(typeof props.skeleton == null) {
       this.skeleton = 0;
@@ -118,6 +75,9 @@ ChaplinGenerator.prototype.askFor = function askFor() {
 ChaplinGenerator.prototype.app = function app() {
   var cb = this.async();
 
+  this.copy('editorconfig', '.editorconfig');
+  this.copy('jshintrc', '.jshintrc');
+
   this.mkdir('app');
   this.mkdir('app/assets');
   this.mkdir('app/assets/fonts');
@@ -133,9 +93,29 @@ ChaplinGenerator.prototype.app = function app() {
   this.template('_bower.json', 'bower.json');
   this.template('_config.json', 'config.json');
   this.template('_package.json', 'package.json');
-  this.copy('Gruntfile.coffee', 'Gruntfile.coffee');
+  this.copy('server.coffee', 'server.coffee');
   this.template('app/_initialize.coffee', 'app/initialize.coffee');
-  this.copy('app/controllers/_home.coffee', 'app/controllers/home' + this.controllerSuffix + '.coffee')
+
+  switch(this.skeleton) {
+    case 1: {
+      break;
+    }
+
+    case 2: {
+      break;
+    }
+
+    default: {
+      this.copy('../skeletons/barebones/Gruntfile.coffee',                 'Gruntfile.coffee');
+      this.copy('../skeletons/barebones/app/controllers/_home.coffee',         'app/controllers/home' + this.controllerSuffix + '.coffee')
+      this.copy('../skeletons/barebones/app/styles/application.styl',          'app/styles/application.styl')
+      this.copy('../skeletons/barebones/app/templates/header.hbs',             'app/templates/header.hbs')
+      this.copy('../skeletons/barebones/app/templates/home.hbs',               'app/templates/home.hbs')
+      this.copy('../skeletons/barebones/app/templates/site.hbs',               'app/templates/site.hbs')
+      this.copy('../skeletons/barebones/app/views/home/header-view.coffee',    'app/views/home/header-view.coffee')
+      this.copy('../skeletons/barebones/app/views/home/home-page-view.coffee', 'app/views/home/home-page-view.coffee')
+    }
+  }
 
   var _this = this;
 
@@ -157,72 +137,3 @@ ChaplinGenerator.prototype.app = function app() {
   }.bind(this));
 
 }
-
-/*
-ChaplinGenerator.prototype.generateRequests = function(){
-   var cb = this.async(),
-      prompts = [];
-
-    if( this.generateControllers ){
-      prompts.push({
-        name: 'controllerNames',
-        message: 'Name your controllers ( Ex: users posts items/comments )'
-      });
-    }
-
-    if( this.generateModels ){
-      prompts.push({
-        name: 'modelNames',
-        message: 'Name your models ( Ex: user post items/comment )'
-      });
-    }
-
-    if( this.generateViews ){
-      prompts.push({
-        name: 'viewNames',
-        message: 'Name your views ( Ex: home cart items/comments )'
-      });
-    }
-
-    // Run callback if there were no prompts added
-    if( !prompts.length ){
-      cb();
-      return;
-    }
-
-    this.prompt( prompts, function( props ){
-      var fileCount = 1,
-        onFinished = function(){
-          fileCount--;
-          if( !fileCount ){
-            cb();
-          }
-        },
-        createFiles = function( name, args, appendStr ) {
-          var appendName = appendStr || '';
-
-          if( args && args.length ){
-            var arr = args.split(' ');
-            fileCount += arr.length;
-            for( var cur = 0; cur < arr.length; cur ++){
-              this.invoke('chaplin:'+name, { args: [ arr[cur]+ appendName ] }, onFinished );
-            }
-          }
-        }.bind( this );
-
-      createFiles( 'view', props.viewNames );
-      createFiles( 'model', props.modelNames );
-      createFiles( 'controller', props.controllerNames ); //Append -controller to all controllers
-
-      // Run this first once in case no filenames were passed
-      onFinished();
-
-    }.bind(this));
-
-};
-*/
-
-ChaplinGenerator.prototype.projectfiles = function projectfiles() {
-  this.copy('editorconfig', '.editorconfig');
-  this.copy('jshintrc', '.jshintrc');
-};
