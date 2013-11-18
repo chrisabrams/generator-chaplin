@@ -4,17 +4,15 @@ var fs     = require('fs'),
     path   = require('path'),
     util   = require('util'),
     walk   = require(__dirname + '/lib/walk'),
-    yeoman = require('yeoman-generator'),
-
-    controllerGenerator = require('../controller/index'),
-    modelGenerator      = require('../model/index'),
-    viewGenerator       = require('../view/index');
+    yeoman = require('yeoman-generator')
 
 var ChaplinGenerator = module.exports = function ChaplinGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
 
   this.on('end', function () {
-    this.installDependencies({ skipInstall: options['skip-install'] });
+    if(!this.exists) {
+      this.installDependencies({ skipInstall: options['skip-install'] });
+    }
   });
 
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
@@ -23,56 +21,77 @@ var ChaplinGenerator = module.exports = function ChaplinGenerator(args, options,
 util.inherits(ChaplinGenerator, yeoman.generators.Base);
 
 ChaplinGenerator.prototype.askFor = function askFor() {
+
   var cb = this.async();
 
-  // have Yeoman greet the user.
-  console.log(this.yeoman);
+  var _this = this;
 
-  var prompts = [
-    {
-      name: 'appName',
-      message: 'Application name'
-    },
-    {
-      name: 'controllerSuffix',
-      message: 'Controller suffix (leave this blank if you dont want one)'
-    },
-    {
-      name: 'skeleton',
-      message: " \
-      [0] Barebones (minimum to get started)\n \
-      [1] HTML 5 Boilerplate\n \
-      [2] Twitter Bootstrap\n \
-      Please enter the number next to the skeleton you would like\n\n \
-      "
-    }
-  ];
+  fs.exists('Gruntfile.coffee', function(exists) {
 
-  this.prompt(prompts, function (props) {
-    this.appName = props.appName;
-
-    if(typeof props.controllerSuffix == 'string' && props.controllerSuffix.length > 0) {
-      this.controllerSuffix = props.controllerSuffix;
+    if(exists) {
+      console.warn("This folder is not empty.")
+      _this.exists = true;
+      return cb();
     }
 
     else {
-      this.controllerSuffix = '';
+
+      // have Yeoman greet the user.
+      console.log(this.yeoman);
+
+      var prompts = [
+        {
+          name: 'appName',
+          message: 'Application name'
+        },
+        {
+          name: 'controllerSuffix',
+          message: 'Controller suffix (leave this blank if you dont want one)'
+        },
+        {
+          name: 'skeleton',
+          message: " \
+          [0] Barebones (minimum to get started)\n \
+          [1] HTML 5 Boilerplate\n \
+          [2] Twitter Bootstrap\n \
+          Please enter the number next to the skeleton you would like\n\n \
+          "
+        }
+      ];
+
+      this.prompt(prompts, function (props) {
+        this.appName = props.appName;
+
+        if(typeof props.controllerSuffix == 'string' && props.controllerSuffix.length > 0) {
+          this.controllerSuffix = props.controllerSuffix;
+        }
+
+        else {
+          this.controllerSuffix = '';
+        }
+
+        if(typeof props.skeleton == null) {
+          this.skeleton = 0;
+        }
+
+        else {
+          this.skeleton = parseInt(props.skeleton);
+        }
+
+        cb();
+
+      }.bind(this));
     }
+  })
 
-    if(typeof props.skeleton == null) {
-      this.skeleton = 0;
-    }
-
-    else {
-      this.skeleton = parseInt(props.skeleton);
-    }
-
-    cb();
-
-  }.bind(this));
 };
 
 ChaplinGenerator.prototype.app = function app() {
+
+  if(this.exists) {
+    return;
+  }
+
   var cb = this.async();
 
   this.copy('editorconfig', '.editorconfig');
