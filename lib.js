@@ -24,11 +24,27 @@ module.exports = helpers = {
       }
 
       if(this.path) {
-        this.template('_' + type + '.coffee', 'app/' + pathType + 's/' + this.path + '/' + name + '.coffee');
+
+        if(type == 'template') {
+          this.copy('index.hbs', 'app/templates/' + this.path + '/' + name + '.hbs')
+        }
+
+        else {
+          this.template('_' + type + '.coffee', 'app/' + pathType + 's/' + this.path + '/' + name + '.coffee');
+        }
+
       }
 
       else {
-        this.template('_' + type + '.coffee', 'app/' + pathType + 's/' + name + '.coffee');
+
+        if(type == 'template') {
+          this.copy('index.hbs', 'app/templates/' + name + '.hbs')
+        }
+
+        else {
+          this.template('_' + type + '.coffee', 'app/' + pathType + 's/' + name + '.coffee');
+        }
+
       }
 
     }
