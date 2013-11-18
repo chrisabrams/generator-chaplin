@@ -78,7 +78,7 @@ module.exports = helpers = {
 
     var currentFolder = process.cwd().split('/').pop()
 
-    exec('rm -rfv ' + process.cwd() + '/*')
+    exec('rm -rf ' + process.cwd() + '/*')
 
   },
 
