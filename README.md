@@ -66,6 +66,13 @@ This would create `app/views/myview.coffee`.
 
 This would create `app/views/mycollectionview.coffee`.
 
+### Templates
+Creates a handlebars tempalte file.
+
+    yo chaplin:templates 'foo'
+
+This would create `app/templates/foo.hbs`
+
 ## Run the server
 
     grunt s
