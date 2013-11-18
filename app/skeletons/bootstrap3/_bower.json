@@ -1,0 +1,9 @@
+{
+  "name": "generator-chaplin",
+  "version": "0.0.0",
+  "main": "public/javascripts/app.js",
+  "dependencies": {
+    "bootstrap": "3.0.2",
+    "jquery": "2.0.3"
+  }
+}

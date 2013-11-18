@@ -3,7 +3,7 @@
 var path    = require('path');
 var helpers = require('yeoman-generator').test;
 
-describe('barebones generator', function () {
+describe('bootstrap generator', function () {
 
   beforeEach(function (done) {
 
@@ -34,9 +34,11 @@ describe('barebones generator', function () {
       'app/lib/utils.coffee',
       'app/lib/view-helper.coffee',
       'app/styles/application.styl',
+      'app/templates/footer.hbs',
       'app/templates/home.hbs',
-      'app/templates/site.hbs',
       'app/templates/header.hbs',
+      'app/templates/jumbotron.hbs',
+      'app/templates/site.hbs',
       //'app/controllers/home.coffee', Need to figure this one out
       'app/controllers/base/controller.coffee',
       'app/assets/index.html',
@@ -44,11 +46,13 @@ describe('barebones generator', function () {
       'app/assets/images/yeah.gif',
       'app/models/base/collection.coffee',
       'app/models/base/model.coffee',
-      'app/views/site-view.coffee',
       'app/views/base/collection-view.coffee',
       'app/views/base/view.coffee',
-      'app/views/home/header-view.coffee',
-      'app/views/home/home-page-view.coffee',
+      'app/views/bootstrap/jumbotron.coffee',
+      'app/views/footer.coffee',
+      'app/views/header.coffee',
+      'app/views/home/home-page.coffee',
+      'app/views/site-view.coffee',
       '.jshintrc',
       '.editorconfig'
     ];
@@ -56,7 +60,7 @@ describe('barebones generator', function () {
     helpers.mockPrompt(this.app, {
       'appName': 'footestbaz',
       'controllerSuffix': '',
-      'skeleton': '0'
+      'skeleton': '2'
     });
 
     this.app.options['skip-install'] = true;
