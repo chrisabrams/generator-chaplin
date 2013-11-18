@@ -9,6 +9,8 @@ var fs     = require('fs'),
 var ChaplinGenerator = module.exports = function ChaplinGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
 
+  this.exists = false;
+
   this.on('end', function () {
     if(!this.exists) {
       this.installDependencies({ skipInstall: options['skip-install'] });
@@ -24,13 +26,11 @@ ChaplinGenerator.prototype.askFor = function askFor() {
 
   var cb = this.async();
 
-  var _this = this;
-
   fs.exists('Gruntfile.coffee', function(exists) {
 
     if(exists) {
       console.warn("This folder is not empty.")
-      _this.exists = true;
+      this.exists = true;
       return cb();
     }
 
@@ -82,7 +82,7 @@ ChaplinGenerator.prototype.askFor = function askFor() {
 
       }.bind(this));
     }
-  })
+  }.bind(this));
 
 };
 
