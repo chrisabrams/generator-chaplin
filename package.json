@@ -12,6 +12,12 @@
     "email": "mail@chrisabrams.com",
     "url": "https://github.com/chrisabrams"
   },
+  "contributors": [
+    {
+      "name": "Samuel Hough",
+      "url": "https://github.com/samuelhough"
+    }
+  ],
   "main": "app/index.js",
   "repository": {
     "type": "git",
