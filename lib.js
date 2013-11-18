@@ -1,4 +1,6 @@
-_ = require('lodash');
+var _    = require('lodash'),
+    fs   = require('fs'),
+    exec = require('child_process').exec
 
 module.exports = helpers = {
 
@@ -70,6 +72,14 @@ module.exports = helpers = {
       }
 
     }
+  },
+
+  deleteCurrentFolder: function() {
+
+    var currentFolder = process.cwd().split('/').pop()
+
+    exec('rm -rfv ' + process.cwd() + '/*')
+
   },
 
   slugify: function (str) {

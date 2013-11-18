@@ -77,6 +77,10 @@ This would create `app/templates/foo.hbs`
 
     grunt s
 
+## Destroy a project
+
+    yo chaplin:destroy
+
 ## License
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
