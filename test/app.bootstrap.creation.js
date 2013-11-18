@@ -1,7 +1,8 @@
 'use strict';
 
-var path    = require('path');
-var helpers = require('yeoman-generator').test;
+var assert  = require('assert'),
+    path    = require('path'),
+    helpers = require('yeoman-generator').test;
 
 describe('bootstrap generator', function () {
 
@@ -41,9 +42,7 @@ describe('bootstrap generator', function () {
       'app/templates/site.hbs',
       //'app/controllers/home.coffee', Need to figure this one out
       'app/controllers/base/controller.coffee',
-      'app/assets/index.html',
-      'app/assets/images/.gitkeep',
-      'app/assets/images/yeah.gif',
+      'app/assets/index.hbs',
       'app/models/base/collection.coffee',
       'app/models/base/model.coffee',
       'app/views/base/collection-view.coffee',
@@ -72,4 +71,10 @@ describe('bootstrap generator', function () {
     });
 
   });
+
+  it('can be imported without blowing up', function () {
+    var app = require('../app');
+    assert(app !== undefined);
+  });
+
 });

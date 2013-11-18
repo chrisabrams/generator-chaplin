@@ -4,7 +4,7 @@ var assert  = require('assert'),
     path    = require('path'),
     helpers = require('yeoman-generator').test;
 
-describe('barebones generator', function () {
+describe('HTML5 Boilerplate generator', function () {
 
   beforeEach(function (done) {
 
@@ -37,25 +37,32 @@ describe('barebones generator', function () {
       'app/styles/application.styl',
       'app/templates/home.hbs',
       'app/templates/site.hbs',
-      'app/templates/header.hbs',
       //'app/controllers/home.coffee', Need to figure this one out
       'app/controllers/base/controller.coffee',
+      'app/assets/apple-touch-icon-114x114-precomposed.png',
+      'app/assets/apple-touch-icon-144x144-precomposed.png',
+      'app/assets/apple-touch-icon-57x57-precomposed.png',
+      'app/assets/apple-touch-icon-72x72-precomposed.png',
+      'app/assets/apple-touch-icon-precomposed.png',
+      'app/assets/apple-touch-icon.png',
+      'app/assets/favicon.ico',                              
       'app/assets/index.hbs',
       'app/models/base/collection.coffee',
       'app/models/base/model.coffee',
-      'app/views/site-view.coffee',
       'app/views/base/collection-view.coffee',
       'app/views/base/view.coffee',
-      'app/views/home/header-view.coffee',
-      'app/views/home/home-page-view.coffee',
+      'app/views/home/home-page.coffee',
+      'app/views/site-view.coffee',
+      'vendor/main.css',
+      'vendor/normalize.css',
       '.jshintrc',
       '.editorconfig'
     ];
 
     helpers.mockPrompt(this.app, {
-      'appName': 'footestbaz',
+      'appName': 'html5bptest',
       'controllerSuffix': '',
-      'skeleton': '0'
+      'skeleton': '1'
     });
 
     this.app.options['skip-install'] = true;
