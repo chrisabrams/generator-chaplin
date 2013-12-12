@@ -13,17 +13,13 @@ Features:
 
 ## Installation
 
-1. Install Yeoman globally
+1. Install Dependencies
 
-        npm install -g yo
+        npm install -g bower coffee-script grunt-cli yo generator-chaplin
 
-2. Install the Chaplin generator globally
+2. Create a new project folder
 
-        npm install -g generator-chaplin
-
-3. Create a new project folder
-
-4. Initiate the generator in your project folder
+3. Initiate the generator in your project folder
 
         yo chaplin
 
