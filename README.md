@@ -77,6 +77,11 @@ This would create `app/templates/foo.hbs`
 
     yo chaplin:destroy
 
+## Testing
+
+    npm install -g generator-generator
+    npm test
+
 ## License
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
