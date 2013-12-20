@@ -114,6 +114,10 @@ ChaplinGenerator.prototype.app = function app() {
   this.template('_package.json', 'package.json');
   this.copy('server.coffee', 'server.coffee');
   this.template('app/_initialize.coffee', 'app/initialize.coffee');
+  
+  //this.copy('app/application.coffee', 'app/application.coffee');
+  //this.copy('app/mediator.coffee', 'app/mediator.coffee');
+  //this.copy('app/routes.coffee', 'app/routes.coffee');
 
   var path;
 

@@ -6,7 +6,7 @@ var assert  = require('assert'),
 
 describe('bootstrap generator', function () {
 
-  beforeEach(function (done) {
+  before(function (done) {
 
     helpers.testDirectory(path.join(__dirname, 'temp'), function (err) {
       if (err) {

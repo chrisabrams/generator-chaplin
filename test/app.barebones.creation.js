@@ -6,12 +6,9 @@ var assert  = require('assert'),
 
 describe('barebones generator', function () {
 
-  beforeEach(function (done) {
+  before(function (done) {
 
     helpers.testDirectory(path.join(__dirname, 'temp'), function (err) {
-      if (err) {
-        return done(err);
-      }
 
       this.app = helpers.createGenerator('chaplin:app', [
         '../../app'
