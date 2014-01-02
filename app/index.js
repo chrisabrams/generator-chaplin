@@ -113,11 +113,6 @@ ChaplinGenerator.prototype.app = function app() {
   this.template('_config.json', 'config.json');
   this.template('_package.json', 'package.json');
   this.copy('server.coffee', 'server.coffee');
-  this.template('app/_initialize.coffee', 'app/initialize.coffee');
-  
-  //this.copy('app/application.coffee', 'app/application.coffee');
-  //this.copy('app/mediator.coffee', 'app/mediator.coffee');
-  //this.copy('app/routes.coffee', 'app/routes.coffee');
 
   var path;
 
@@ -129,6 +124,10 @@ ChaplinGenerator.prototype.app = function app() {
 
       this.template(path + '/_bower.json',                                     'bower.json');
       this.copy(path + '/Gruntfile.coffee',                                    'Gruntfile.coffee');
+      this.template(path + '/app/_initialize.coffee',                          'app/initialize.coffee');
+      this.copy(path + '/app/application.coffee',                              'app/application.coffee');
+      this.copy(path + '/app/mediator.coffee',                                 'app/mediator.coffee');
+      this.copy(path + '/app/routes.coffee',                                   'app/routes.coffee');
       this.copy(path + '/app/assets/apple-touch-icon-114x114-precomposed.png', 'app/assets/apple-touch-icon-114x114-precomposed.png');
       this.copy(path + '/app/assets/apple-touch-icon-144x144-precomposed.png', 'app/assets/apple-touch-icon-144x144-precomposed.png');
       this.copy(path + '/app/assets/apple-touch-icon-57x57-precomposed.png',   'app/assets/apple-touch-icon-57x57-precomposed.png');
@@ -157,6 +156,10 @@ ChaplinGenerator.prototype.app = function app() {
       this.template(path + '/_bower.json',                      'bower.json');
       this.copy(path + '/app/assets/index.hbs',                 'app/assets/index.hbs');
       this.copy(path + '/Gruntfile.coffee',                     'Gruntfile.coffee');
+      this.template(path + '/app/_initialize.coffee',           'app/initialize.coffee');
+      this.copy(path + '/app/application.coffee',               'app/application.coffee');
+      this.copy(path + '/app/mediator.coffee',                  'app/mediator.coffee');
+      this.copy(path + '/app/routes.coffee',                    'app/routes.coffee');
       this.copy(path + '/app/controllers/_home.coffee',         'app/controllers/home' + this.controllerSuffix + '.coffee')
       this.copy(path + '/app/styles/application.styl',          'app/styles/application.styl')
       this.copy(path + '/app/templates/footer.hbs',             'app/templates/footer.hbs')
@@ -180,6 +183,10 @@ ChaplinGenerator.prototype.app = function app() {
       this.template(path + '/_bower.json',                      'bower.json');
       this.copy(path + '/app/assets/index.hbs',                 'app/assets/index.hbs');
       this.copy(path + '/Gruntfile.coffee',                     'Gruntfile.coffee');
+      this.template(path + '/app/_initialize.coffee',           'app/initialize.coffee');
+      this.copy(path + '/app/application.coffee',               'app/application.coffee');
+      this.copy(path + '/app/mediator.coffee',                  'app/mediator.coffee');
+      this.copy(path + '/app/routes.coffee',                    'app/routes.coffee');
       this.copy(path + '/app/controllers/_home.coffee',         'app/controllers/home' + this.controllerSuffix + '.coffee')
       this.copy(path + '/app/styles/application.styl',          'app/styles/application.styl')
       this.copy(path + '/app/templates/header.hbs',             'app/templates/header.hbs')
@@ -199,7 +206,7 @@ ChaplinGenerator.prototype.app = function app() {
     files.forEach(function(file) {
 
       // Ignore .DS_Store files as well as files that start with _.
-      if ( file.indexOf('.DS_Store') === -1 && file.indexOf('_') === -1 ) {
+      if ( file.indexOf('.DS_Store') === -1 && file.indexOf('_') !== 0 ) {
 
         file = file.replace(__dirname + '/templates/', '');
 
