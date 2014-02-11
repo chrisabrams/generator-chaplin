@@ -1,11 +1,6 @@
 "use strict"
 
 LIVERELOAD_PORT = 35729
-lrSnippet       = require("connect-livereload")(port: LIVERELOAD_PORT)
-moment          = require 'moment'
-
-mountFolder = (connect, dir) ->
-  connect.static require("path").resolve(dir)
 
 module.exports = (grunt) ->
 
@@ -64,15 +59,6 @@ module.exports = (grunt) ->
         src: ['public/js/app.js', 'bower_components/bootstrap/dist/js/bootstrap.js']
         dest: 'public/js/app.js'
 
-    connect:
-      options:
-        hostname: '0.0.0.0'
-        port: 9000
-      livereload:
-        options:
-          middleware: (connect) ->
-            [lrSnippet, mountFolder(connect, "./public")]
-
     copy:
       assets:
         files: [
@@ -108,13 +94,10 @@ module.exports = (grunt) ->
           timeout: 20000
         run: true
 
-    open:
-      server:
-        path: "http://localhost:<%= connect.options.port %>"
-
     shell:
       express:
         options:
+          async: true
           failOnError: true
           stderr: true
           stdout: true
@@ -137,24 +120,16 @@ module.exports = (grunt) ->
         dest: 'public/js/app.js'
 
     watch:
-      options:
-        nospawn: true
-        livereload: LIVERELOAD_PORT
       assets:
         files: ['app/assets/**/*'],
         tasks: ['copy']
         options:
           debounceDelay: 50
       css:
-        files: ['app/css/**/*.styl'],
+        files: ['app/styles/**/*.styl'],
         tasks: ['styles']
         options:
           debounceDelay: 50
-      express:
-        files: ['server.js']
-        tasks: ['express:dev']
-        options:
-          nospawn: true
       hbs:
         files: ['app/templates/**/*.hbs']
         tasks: ['browserify:app']
@@ -168,14 +143,12 @@ module.exports = (grunt) ->
       livereload:
         options:
           livereload: true
-        files: [
-          'public/**/*'
-        ]
+        files: 'public/**/*'
 
   grunt.registerTask 'scripts', ['browserify', 'concat:distJs']
   grunt.registerTask 'styles',  ['stylus', 'concat:distCss']
 
   grunt.registerTask 'b', ['clean', 'copy', 'styles', 'scripts']
   grunt.registerTask 'm', ['b', 'uglify']
-  grunt.registerTask 's', ['b', 'shell:express', 'connect:livereload', 'open', 'watch']
+  grunt.registerTask 's', ['b', 'shell:express', 'watch']
   grunt.registerTask 'default', 'b'

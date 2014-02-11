@@ -114,6 +114,7 @@ module.exports = (grunt) ->
     shell:
       express:
         options:
+          async: true
           failOnError: true
           stderr: true
           stdout: true
@@ -128,24 +129,16 @@ module.exports = (grunt) ->
         dest: 'public/js/app.js'
 
     watch:
-      options:
-        nospawn: true
-        livereload: LIVERELOAD_PORT
       assets:
         files: ['app/assets/**/*'],
         tasks: ['copy']
         options:
           debounceDelay: 50
       css:
-        files: ['app/css/**/*.styl'],
+        files: ['app/styles/**/*.styl'],
         tasks: ['styles']
         options:
           debounceDelay: 50
-      express:
-        files: ['server.js']
-        tasks: ['express:dev']
-        options:
-          nospawn: true
       hbs:
         files: ['app/templates/**/*.hbs']
         tasks: ['browserify:app']
@@ -159,9 +152,7 @@ module.exports = (grunt) ->
       livereload:
         options:
           livereload: true
-        files: [
-          'public/**/*'
-        ]
+        files: 'public/**/*'
 
   grunt.registerTask 'b', ['clean', 'copy', 'browserify']
   grunt.registerTask 'm', ['b', 'uglify']
