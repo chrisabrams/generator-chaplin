@@ -142,6 +142,7 @@ module.exports = (grunt) ->
           debounceDelay: 250
       livereload:
         options:
+          debounceDelay: 250
           livereload: true
         files: 'public/**/*'
 
