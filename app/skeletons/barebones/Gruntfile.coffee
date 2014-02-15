@@ -131,14 +131,14 @@ module.exports = (grunt) ->
     watch:
       assets:
         files: ['app/assets/**/*'],
-        tasks: ['copy']
+        tasks: ['copy:assets']
         options:
-          debounceDelay: 50
+          debounceDelay: 250
       css:
         files: ['app/styles/**/*.styl'],
         tasks: ['styles']
         options:
-          debounceDelay: 50
+          debounceDelay: 250
       hbs:
         files: ['app/templates/**/*.hbs']
         tasks: ['browserify:app']
