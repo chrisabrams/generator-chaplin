@@ -56,7 +56,7 @@ module.exports = (grunt) ->
         ]
         dest: 'public/css/app.css'
       distJs:
-        src: ['public/js/app.js', 'bower_components/bootstrap/dist/js/bootstrap.js']
+        src: ['public/js/app.js']
         dest: 'public/js/app.js'
 
     copy:
@@ -146,7 +146,7 @@ module.exports = (grunt) ->
           livereload: true
         files: 'public/**/*'
 
-  grunt.registerTask 'scripts', ['browserify', 'concat:distJs']
+  grunt.registerTask 'scripts', ['browserify']
   grunt.registerTask 'styles',  ['stylus', 'concat:distCss']
 
   grunt.registerTask 'b', ['clean', 'copy', 'styles', 'scripts']
