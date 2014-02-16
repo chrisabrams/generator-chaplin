@@ -23,6 +23,10 @@ Features:
 
         yo chaplin
 
+## Run the server
+
+    grunt s
+
 ## Scaffolding
 Once you have generated an app, you can add additional scaffolding by executing these commands from the root of your project.
 
@@ -68,10 +72,6 @@ Creates a handlebars tempalte file.
     yo chaplin:templates 'foo'
 
 This would create `app/templates/foo.hbs`
-
-## Run the server
-
-    grunt s
 
 ## Destroy a project
 

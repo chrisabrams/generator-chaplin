@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "dependencies": {
     "backbone": "1.0.0",
-    "chaplin": "0.11.3",
+    "chaplin": "1.0.0",
     "express": "3.4.4",
     "hbs": "2.4.0"
   },

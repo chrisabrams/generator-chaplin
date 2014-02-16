@@ -9,8 +9,8 @@ module.exports = class HomeController extends Controller
   beforeAction: ->
     super
 
-    @compose 'header', HeaderView, region: 'header'
-    @compose 'footer', FooterView, region: 'footer'
+    @reuse 'header', HeaderView, region: 'header'
+    @reuse 'footer', FooterView, region: 'footer'
 
   index: ->
     @view = new JumbotronView region: 'main'
