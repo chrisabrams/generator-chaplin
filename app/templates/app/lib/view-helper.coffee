@@ -1,3 +1,4 @@
+Chaplin    = require 'chaplin'
 Handlebars = require 'hbsfy/runtime'
 
 # Application-specific view helpers
@@ -26,4 +27,4 @@ register 'without', (context, options) ->
 
 # Get Chaplin-declared named routes. {{url "likes#show" "105"}}
 register 'url', (routeName, params..., options) ->
-  Chaplin.helpers.reverse routeName, params
+  Chaplin.utils.reverse routeName, params
