@@ -1,11 +1,10 @@
 "use strict"
 
-LIVERELOAD_PORT = 35729
-lrSnippet       = require("connect-livereload")(port: LIVERELOAD_PORT)
-moment          = require 'moment'
+lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet
+path      = require 'path'
 
 mountFolder = (connect, dir) ->
-  connect.static require("path").resolve(dir)
+  return connect.static(path.resolve(dir))
 
 module.exports = (grunt) ->
 
@@ -47,7 +46,7 @@ module.exports = (grunt) ->
           ]
           shim:
             jquery:
-              path: 'bower_components/jquery/jquery.js'
+              path: 'bower_components/jquery/dist/jquery.js'
               exports: '$'
 
     clean:
@@ -67,12 +66,12 @@ module.exports = (grunt) ->
 
     connect:
       options:
-        hostname: '0.0.0.0'
         port: 9000
+        hostname: '0.0.0.0'
       livereload:
         options:
           middleware: (connect) ->
-            [lrSnippet, mountFolder(connect, "./public")]
+            return [lrSnippet, mountFolder(connect, "./public")]
 
     copy:
       assets:
@@ -97,7 +96,7 @@ module.exports = (grunt) ->
           compress: false
           paths: ['app/css']
         files:
-          'tmp/css/app.css': 'app/css/application.styl'
+          'tmp/css/app.css': 'app/styles/application.styl'
 
     mocha:
       test:
@@ -106,10 +105,6 @@ module.exports = (grunt) ->
           ignoreLeaks: false
           timeout: 20000
         run: true
-
-    open:
-      server:
-        path: "http://localhost:<%= connect.options.port %>"
 
     shell:
       express:
@@ -134,28 +129,46 @@ module.exports = (grunt) ->
         tasks: ['copy:assets']
         options:
           debounceDelay: 250
-      css:
-        files: ['app/styles/**/*.styl'],
-        tasks: ['styles']
-        options:
-          debounceDelay: 250
-      hbs:
-        files: ['app/templates/**/*.hbs']
-        tasks: ['browserify:app']
-        options:
-          debounceDelay: 250
-      js:
-        files: ['app/**/*.coffee'],
-        tasks: ['browserify:app']
-        options:
-          debounceDelay: 250
       livereload:
         options:
           debounceDelay: 250
           livereload: true
         files: 'public/**/*'
 
-  grunt.registerTask 'b', ['clean', 'copy', 'browserify']
+    watchify:
+      app:
+        files:
+          'public/js/app.js': [
+            './app/**/*.coffee'
+            './app/**/*.js'
+            './app/**/*.hbs'
+          ]
+        options:
+          debug: true
+          transform: ['coffeeify', 'hbsfy']
+          extensions: ['.coffee', '.hbs']
+          insertGlobals: true
+          aliasMappings: [
+            {
+              cwd: 'app/controllers'
+              src: ['**/*.coffee']
+              dest: 'controllers'
+            },
+            {
+              cwd: 'app/templates'
+              src: ['**/*.hbs']
+              dest: '../templates'
+            }
+          ]
+          shim:
+            jquery:
+              path: './bower_components/jquery/dist/jquery.js'
+              exports: '$'
+
+  grunt.registerTask 'scripts', ['browserify']
+  grunt.registerTask 'styles',  ['stylus', 'concat:distCss']
+
+  grunt.registerTask 'b', ['clean', 'copy', 'styles', 'scripts']
   grunt.registerTask 'm', ['b', 'uglify']
-  grunt.registerTask 's', ['b', 'shell:express', 'connect:livereload', 'open', 'watch']
+  grunt.registerTask 's', ['b', 'shell:express', 'watchify', 'connect', 'watch']
   grunt.registerTask 'default', 'b'

@@ -46,7 +46,7 @@ ChaplinGenerator.prototype.askFor = function askFor() {
         },
         {
           name: 'controllerSuffix',
-          message: 'Controller suffix (leave this blank if you dont want one)'
+          message: 'Controller suffix (optional)'
         },
         {
           name: 'skeleton',
