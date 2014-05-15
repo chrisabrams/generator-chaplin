@@ -1,12 +1,38 @@
 "use strict"
 
-lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet
-path      = require 'path'
-
-mountFolder = (connect, dir) ->
-  return connect.static(path.resolve(dir))
+glob  = require 'glob'
+grunt = require 'grunt'
+util  = require 'util'
+ 
+aliasMappingsToAliasArray = (aliasMappings) ->
+ 
+  aliasArray = []
+ 
+  aliases = (if util.isArray(aliasMappings) then aliasMappings else [aliasMappings])
+ 
+  aliases.forEach (alias) ->
+ 
+    grunt.file.expandMapping(alias.src, alias.dest,
+      cwd: alias.cwd
+    ).forEach (file) ->
+ 
+      expose = file.dest.substr(0, file.dest.lastIndexOf("."))
+      pa = "./" + file.src[0] + ":" + expose
+ 
+      aliasArray.push pa
+ 
+      return
+ 
+    return
+ 
+  return aliasArray
 
 module.exports = (grunt) ->
+
+  watch = false
+
+  if grunt.cli.tasks.indexOf 'w' > -1
+    watch = true
 
   require("matchdep").filterDev("grunt-*").forEach grunt.loadNpmTasks
 
@@ -20,7 +46,22 @@ module.exports = (grunt) ->
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n'
 
     browserify:
+      vendor:
+        dest: 'public/js/vendor.js'
+        src: []
+        options:
+          browserifyOptions:
+            fullPaths: false
+          alias: [
+            './node_modules/backbone/backbone.js:backbone'
+            './node_modules/jquery/dist/jquery.js:jquery'
+            './node_modules/handlebars/dist/handlebars.js:handlebars'
+            './node_modules/hbsfy/runtime.js:hbsfy/runtime'
+            './node_modules/underscore/underscore.js:underscore'
+          ]
+
       app:
+        watch: watch
         files:
           'public/js/app.js': [
             'app/**/*.coffee'
@@ -28,26 +69,34 @@ module.exports = (grunt) ->
             'app/**/*.hbs'
           ]
         options:
-          debug: true
-          transform: ['coffeeify', 'hbsfy']
-          extensions: ['.coffee', '.hbs']
-          insertGlobals: true
-          aliasMappings: [
-            {
-              cwd: 'app/controllers'
-              src: ['**/*.coffee']
-              dest: 'controllers'
-            },
-            {
-              cwd: 'app/templates'
-              src: ['**/*.hbs']
-              dest: '../templates'
-            }
+          browserifyOptions:
+            extensions: [ '.coffee', '.hbs' ]
+            fullPaths: false
+          bundleOptions:
+            debug: true
+          transform: [ 'coffeeify', 'hbsfy' ]
+          external: [
+            'backbone'
+            'handlebars'
+            'hbsfy/runtime'
+            'jquery'
           ]
-          shim:
-            jquery:
-              path: 'bower_components/jquery/dist/jquery.js'
-              exports: '$'
+          alias: aliasMappingsToAliasArray(
+            [
+              cwd: './app/controllers'
+              src: [
+                '**/*.coffee'
+                '**/*.js'
+              ]
+              dest: 'controllers'
+            ,
+              cwd: './app/templates'
+              src: [
+                '**/*.hbs'
+              ]
+              dest: '../templates'
+            ]
+          )
 
     clean:
       dist: ['public/', 'tmp/']
@@ -62,15 +111,6 @@ module.exports = (grunt) ->
       distJs:
         src: ['public/js/app.js']
         dest: 'public/js/app.js'
-
-    connect:
-      options:
-        port: 9000
-        hostname: '0.0.0.0'
-      livereload:
-        options:
-          middleware: (connect) ->
-            return [lrSnippet, mountFolder(connect, "./public")]
 
     copy:
       assets:
@@ -110,7 +150,7 @@ module.exports = (grunt) ->
     shell:
       express:
         options:
-          async: true
+          async: watch
           failOnError: true
           stderr: true
           stdout: true
@@ -144,40 +184,11 @@ module.exports = (grunt) ->
           livereload: true
         files: 'public/**/*'
 
-    watchify:
-      app:
-        files:
-          'public/js/app.js': [
-            './app/**/*.coffee'
-            './app/**/*.js'
-            './app/**/*.hbs'
-          ]
-        options:
-          debug: true
-          transform: ['coffeeify', 'hbsfy']
-          extensions: ['.coffee', '.hbs']
-          insertGlobals: true
-          aliasMappings: [
-            {
-              cwd: 'app/controllers'
-              src: ['**/*.coffee']
-              dest: 'controllers'
-            },
-            {
-              cwd: 'app/templates'
-              src: ['**/*.hbs']
-              dest: '../templates'
-            }
-          ]
-          shim:
-            jquery:
-              path: './bower_components/jquery/dist/jquery.js'
-              exports: '$'
-
   grunt.registerTask 'scripts', ['browserify']
   grunt.registerTask 'styles',  ['stylus', 'concat:distCss']
 
   grunt.registerTask 'b', ['clean', 'copy', 'styles', 'scripts']
   grunt.registerTask 'm', ['b', 'uglify']
-  grunt.registerTask 's', ['b', 'shell:express', 'watchify', 'connect', 'watch']
+  grunt.registerTask 's', ['b', 'shell:express']
+  grunt.registerTask 'w', ['b', 'shell:express', 'watch']
   grunt.registerTask 'default', 'b'

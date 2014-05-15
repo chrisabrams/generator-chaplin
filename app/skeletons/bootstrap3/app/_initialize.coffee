@@ -1,3 +1,5 @@
+$           = require 'jquery'
+
 Application = require './application'
 routes      = require './routes'
 

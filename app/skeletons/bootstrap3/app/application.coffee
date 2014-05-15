@@ -1,4 +1,5 @@
-$          = require 'jquery'
+# Assigned to window to make Bootstrap happy
+window.jQuery = $ = require 'jquery'
 
 # jQuery plugins
 require '../bower_components/bootstrap/dist/js/bootstrap'
