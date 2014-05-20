@@ -61,7 +61,6 @@ module.exports = (grunt) ->
           ]
 
       app:
-        watch: watch
         files:
           'public/js/app.js': [
             'app/**/*.coffee'
@@ -69,6 +68,8 @@ module.exports = (grunt) ->
             'app/**/*.hbs'
           ]
         options:
+          watch: watch
+          keepAlive: false
           browserifyOptions:
             extensions: [ '.coffee', '.hbs' ]
             fullPaths: false
@@ -189,6 +190,5 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'b', ['clean', 'copy', 'styles', 'scripts']
   grunt.registerTask 'm', ['b', 'uglify']
-  grunt.registerTask 's', ['b', 'shell:express']
-  grunt.registerTask 'w', ['b', 'shell:express', 'watch']
+  grunt.registerTask 'w', ['shell:express', 'b', 'watch']
   grunt.registerTask 'default', 'b'

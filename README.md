@@ -25,7 +25,9 @@ Features:
 
 ## Run the server
 
-    grunt s
+    grunt w
+
+On changing a file, the watch command will update the build on the fly and trigger livereload.
 
 ## Scaffolding
 Once you have generated an app, you can add additional scaffolding by executing these commands from the root of your project.
