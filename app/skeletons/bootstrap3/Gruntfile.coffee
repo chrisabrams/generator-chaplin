@@ -179,7 +179,12 @@ module.exports = (grunt) ->
         tasks: ['copy:assets']
         options:
           debounceDelay: 250
-      livereload:
+      styles:
+        files: ['app/styles/**/*']
+        tasks: ['styles']
+        options:
+          debounceDelay: 250
+      watchify:
         options:
           debounceDelay: 250
           livereload: true
