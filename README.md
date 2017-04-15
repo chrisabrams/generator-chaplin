@@ -21,7 +21,11 @@ Features:
 
 3. Initiate the generator in your project folder
 
-        yo chaplin
+    yo chaplin
+
+4. Run the server
+
+    grunt s
 
 ## Run the server
 
